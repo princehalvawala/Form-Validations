@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
+
+    <link rel="stylesheet" href="style.css">
+    <title>Js form validation</title>
+  </head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Registration Form</h2>
+        </div>
+        <form class="form" id="form">
+            <div class="form-control">
+                <label>USERNAME</label>
+                <input type="text" name="" id="username" placeholder="Enter Your Full Name" autocomplete="off">
+                  <i class="bi bi-check-circle"></i>
+                  <i class="bi bi-exclamation-circle"></i>
+                  <small>Error Msg</small>               
+            </div>
+            <div class="form-control">
+              <label>Email</label>
+              <input type="email" name="" id="email" placeholder="Enter Your Email" autocomplete="off">
+                <i class="bi bi-check-circle"></i>
+                <i class="bi bi-exclamation-circle"></i>
+                <small>Error Msg</small>               
+            </div>
+          <div class="form-control">
+            <label>Phone Number</label>
+            <input type="number" name="" id="phone" placeholder="Enter Your Phone Number" autocomplete="off">
+              <i class="bi bi-check-circle"></i>
+              <i class="bi bi-exclamation-circle"></i>
+              <small>Error Msg</small>               
+          </div>
+          <div class="form-control">
+            <label>Password</label>
+            <input type="password" name="" id="password" placeholder="Enter Your Password">
+              <i class="bi bi-check-circle"></i>
+              <i class="bi bi-exclamation-circle"></i>
+              <small>Error Msg</small>               
+          </div>
+          <div class="form-control">
+            <label>Confirm Password</label>
+            <input type="password" name="" id="cpassword" placeholder="Enter Your Password again">
+              <i class="bi bi-check-circle"></i>
+              <i class="bi bi-exclamation-circle"></i>
+              <small>Error Msg</small>               
+          </div>
+          <input type="submit" value="Submit" class="btn" name=""> 
+        </form>
+    </div>
+
+
+
+<script>
+  
+  const form = document.getElementById('form');
+  const username = document.getElementById('username');
+  const email = document.getElementById('email');
+  const phone = document.getElementById('phone');
+  const password = document.getElementById('password');
+  const cpassword = document.getElementById('cpassword');
+  
+
+  // --------- Add Event ------------------------*/
+  form.addEventListener('submit',(event)=>{
+    
+    event.preventDefault();// does not return ? on submit//
+    validate();
+  })
+  
+  // more email validation //
+  const isEmail = (emailVal) => {
+      var atSymbol = emailVal.indexOf("@");
+      if(atSymbol < 1) return false; //if @ symbol placed in starting it should give error //
+      
+      var dot = emailVal.lastIndexOf('.');// dot validation in email //
+      if(dot <= atSymbol + 2) return false;//after @ there should be minimum 2 char then after onlu we can place '.'//
+      if(dot === emailVal.length - 1) return false; // it is used for checking whether '.' is placed at last position or not //
+
+      return true;
+      
+
+  }
+  // defining validate function //
+
+  const validate = () =>{
+    
+    // trim removes 'Whitespace'from beginning and ending// 
+    const usernameVal = username.value.trim();
+    const emailVal = email.value.trim();
+    const phoneVal = phone.value.trim();
+    const passwordVal = password.value.trim();
+    const cpasswordVal = cpassword.value.trim();
+
+    //  Username Validation //
+    if (usernameVal===""){
+      
+      setErrorMsg(username,'username cannot be blank');
+    }else if(usernameVal.length < 3){
+      setErrorMsg(username,'username min 3 char');
+    }else{
+      setSuccessMsg(username);
+    }  
+
+
+    // Email Validation //
+    if (emailVal===""){
+      setErrorMsg(email,'email cannot be blank');
+    }else if(!isEmail(emailVal)){
+      setErrorMsg(email,'Not a valid Email');
+    }else{
+      setSuccessMsg(email);
+    }
+
+    // Phone Validation //
+
+    if (phoneVal === ""){     
+      setErrorMsg(phone,'phonenumber cannot be blank');
+    }else if(phoneVal.length !== 10){
+      setErrorMsg(phone,'please enter 10number digit');
+    }else{
+      setSuccessMsg(phone);
+    } 
+    
+
+    // PassWord Validation //
+
+    if (passwordVal === ""){     
+      setErrorMsg(password,'PassWord cannot be blank');
+    }else if(passwordVal.length < 5){
+      setErrorMsg(password,'Minimum 6 characters.');
+    }else{
+      setSuccessMsg(password);
+    }   
+
+    // Confirm Password Validation //
+    if (cpasswordVal === ""){     
+      setErrorMsg(cpassword,'Confirm PassWord cannot be blank');
+    }
+    else if( (passwordVal.length !== cpasswordVal.length) || (passwordVal !== cpasswordVal) ){
+      setErrorMsg(cpassword,'Password not matching.');
+    }  
+    else if( (passwordVal.length === cpasswordVal.length) && (passwordVal === cpasswordVal) ){
+      setSuccessMsg(cpassword);
+    }else{
+      setErrorMsg(cpassword,'Password not matching.');
+    }
+
+
+
+
+
+
+  }
+  
+  // For Displaying mssg to know it is from which div 'username' 'email' etc  // 
+    function setErrorMsg(input,errormsgs){
+      
+        const formControl = input.parentElement;
+        console.log(formControl);
+        const small = formControl.querySelector('small');
+        formControl.className = "form-control error";
+        small.innerText = errormsgs;      
+    }
+    
+    function setSuccessMsg(input){
+        const formControl = input.parentElement; 
+        console.log(formControl);   
+        formControl.className = "form-control success";
+
+    }
+
+</script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+  
+
+  </body>
+</html>
